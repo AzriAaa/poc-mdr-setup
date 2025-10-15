@@ -280,47 +280,48 @@ export function MerchantPlanSelector({
               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-full p-0" align="start">
-            <Command>
-              <CommandInput placeholder="Search plans..." />
-              <CommandEmpty>
+          <PopoverContent className="w-[calc(100vw-2rem)] sm:w-full p-0" align="start">
+            <Command className="max-h-[70vh] overflow-hidden">
+              <CommandInput placeholder="Search plans..." className="h-12" />
+              <CommandEmpty className="py-6 text-center text-sm">
                 {availablePlans.length === 0
                   ? "No plans available for the selected products"
                   : "No plan found."}
               </CommandEmpty>
-              <CommandGroup>
+              <CommandGroup className="max-h-[calc(70vh-4rem)] overflow-auto">
                 {availablePlans.map((plan) => (
                   <CommandItem
                     key={plan.id}
                     value={plan.id}
                     onSelect={() => handlePlanSelect(plan.id)}
+                    className="py-3"
                   >
                     <Check
                       className={cn(
-                        "mr-2 h-4 w-4",
+                        "mr-2 h-4 w-4 shrink-0",
                         selectedPlan === plan.id ? "opacity-100" : "opacity-0"
                       )}
                     />
-                    <div className="flex flex-col flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium">{plan.name}</span>
+                    <div className="flex flex-col flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-medium text-sm sm:text-base">{plan.name}</span>
                         {plan.category === "partner" && (
-                          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">
+                          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded shrink-0">
                             Partner
                           </span>
                         )}
                         {plan.category === "premium" && (
-                          <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded">
+                          <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded shrink-0">
                             Premium
                           </span>
                         )}
                         {plan.category === "enterprise" && (
-                          <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded">
+                          <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded shrink-0">
                             Enterprise
                           </span>
                         )}
                       </div>
-                      <span className="text-sm text-muted-foreground">{plan.description}</span>
+                      <span className="text-xs sm:text-sm text-muted-foreground line-clamp-2">{plan.description}</span>
                     </div>
                   </CommandItem>
                 ))}

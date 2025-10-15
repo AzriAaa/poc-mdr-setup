@@ -10,6 +10,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Edit2 } from "lucide-react";
 
 interface CardSectionProps {
@@ -93,22 +99,25 @@ const MDR_CONFIGS: MDRConfig[] = [
 
 export function CardSection({ selectedPlan, onFieldChange }: CardSectionProps) {
   return (
-    <Card className="p-6 border-accent/20 shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-500">
-      {/* Header with Card title and Send for Approval checkbox */}
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-2xl font-bold">Card</h3>
-        <div className="flex items-center gap-2">
-          <Checkbox id="card-send-approval" defaultChecked />
-          <label htmlFor="card-send-approval" className="text-sm font-medium cursor-pointer">
-            Send for Approval
-          </label>
-        </div>
-      </div>
+    <Accordion type="single" collapsible defaultValue="card-content">
+      <AccordionItem value="card-content" className="border rounded-lg">
+        <Card className="border-accent/20 shadow-lg">
+          <AccordionTrigger className="px-4 sm:px-6 hover:no-underline">
+            <h3 className="text-xl sm:text-2xl font-bold">Card</h3>
+          </AccordionTrigger>
+          <AccordionContent className="px-4 sm:px-6 pb-4 sm:pb-6">
+            {/* Send for Approval checkbox */}
+            <div className="flex items-center justify-end gap-2 mb-6">
+              <Checkbox id="card-send-approval" defaultChecked />
+              <label htmlFor="card-send-approval" className="text-sm font-medium cursor-pointer">
+                Send for Approval
+              </label>
+            </div>
 
       {/* MDR Section Header */}
-      <div className="flex items-center justify-between mb-6 mt-8">
-        <h4 className="text-xl font-semibold">MDR</h4>
-        <Button variant="outline" size="sm" className="rounded-full">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <h4 className="text-lg sm:text-xl font-semibold">MDR</h4>
+        <Button variant="outline" size="sm" className="rounded-full w-full sm:w-auto">
           Add MDR
         </Button>
       </div>
@@ -116,7 +125,7 @@ export function CardSection({ selectedPlan, onFieldChange }: CardSectionProps) {
       {/* MDR Configurations */}
       <div className="space-y-8">
         {MDR_CONFIGS.map((config, index) => (
-          <div key={index} className="grid grid-cols-3 gap-4">
+          <div key={index} className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Condition Column */}
             <Card className="p-4 bg-muted/30">
               <div className="flex items-center justify-between mb-4">
@@ -126,15 +135,15 @@ export function CardSection({ selectedPlan, onFieldChange }: CardSectionProps) {
                 </Button>
               </div>
               <div className="space-y-3">
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                   <span className="text-sm text-muted-foreground">Account Type</span>
                   <span className="text-sm font-medium">{config.condition.accountType}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                   <span className="text-sm text-muted-foreground">Transaction Model</span>
                   <span className="text-sm font-medium">{config.condition.transactionModel}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                   <span className="text-sm text-muted-foreground">Transaction Status</span>
                   <span className="text-sm font-medium">{config.condition.transactionStatus}</span>
                 </div>
@@ -150,15 +159,15 @@ export function CardSection({ selectedPlan, onFieldChange }: CardSectionProps) {
                 </Button>
               </div>
               <div className="space-y-3">
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                   <span className="text-sm text-muted-foreground">MDR Type</span>
                   <span className="text-sm font-medium">{config.overallMDR.mdrType}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                   <span className="text-sm text-muted-foreground">MDR Value</span>
                   <span className="text-sm font-medium">{config.overallMDR.mdrValue}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                   <span className="text-sm text-muted-foreground">Minimum / Maximum (MYR)</span>
                   <span className="text-sm font-medium">{config.overallMDR.minimumMaximum}</span>
                 </div>
@@ -176,19 +185,19 @@ export function CardSection({ selectedPlan, onFieldChange }: CardSectionProps) {
               <div className="space-y-6">
                 {config.profitSharing.map((partner, pIndex) => (
                   <div key={pIndex} className="space-y-2">
-                    <div className="flex justify-between">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                       <span className="text-sm text-muted-foreground">Partner</span>
                       <span className="text-sm font-medium">{partner.partner}</span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                       <span className="text-sm text-muted-foreground">To be Settled</span>
                       <span className="text-sm font-medium">{partner.toBeSettled}</span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                       <span className="text-sm text-muted-foreground">MDR Type / Value</span>
                       <span className="text-sm font-medium">{partner.mdrTypeValue}</span>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                       <span className="text-sm text-muted-foreground">Minimum / Maximum (MYR)</span>
                       <span className="text-sm font-medium">{partner.minimumMaximum}</span>
                     </div>
@@ -204,9 +213,9 @@ export function CardSection({ selectedPlan, onFieldChange }: CardSectionProps) {
       </div>
 
       {/* MID Configuration Section */}
-      <div className="mt-12">
-        <h4 className="text-xl font-semibold mb-6">MID Configuration</h4>
-        <div className="grid grid-cols-2 gap-6">
+      <div className="mt-8 sm:mt-12">
+        <h4 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6">MID Configuration</h4>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="space-y-2">
             <Label htmlFor="card-exchange-id" className="text-sm text-muted-foreground">
               Card Exchange ID
@@ -256,9 +265,9 @@ export function CardSection({ selectedPlan, onFieldChange }: CardSectionProps) {
       </div>
 
       {/* Settlement Section */}
-      <div className="mt-12">
-        <h4 className="text-xl font-semibold mb-6">Settlement</h4>
-        <div className="grid grid-cols-2 gap-6">
+      <div className="mt-8 sm:mt-12">
+        <h4 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6">Settlement</h4>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="space-y-2">
             <Label htmlFor="card-settlement-mode" className="text-sm text-muted-foreground">
               Settlement Mode
@@ -331,6 +340,9 @@ export function CardSection({ selectedPlan, onFieldChange }: CardSectionProps) {
           </div>
         </div>
       </div>
-    </Card>
+          </AccordionContent>
+        </Card>
+      </AccordionItem>
+    </Accordion>
   );
 }

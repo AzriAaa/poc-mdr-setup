@@ -21,17 +21,17 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background py-12 px-4">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <div className="min-h-screen bg-background py-6 sm:py-12 px-4">
+      <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8">
         {/* Header */}
         <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold text-foreground">Payment Configuration</h1>
-          <p className="text-muted-foreground text-lg">Configure your merchant payment methods and plans</p>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground">Payment Configuration</h1>
+          <p className="text-muted-foreground text-base sm:text-lg">Configure your merchant payment methods and plans</p>
         </div>
 
         {/* Main Configuration Card */}
-        <Card className="p-8 shadow-lg border-border">
-          <div className="space-y-8">
+        <Card className="p-4 sm:p-6 lg:p-8 shadow-lg border-border">
+          <div className="space-y-6 sm:space-y-8">
             {/* Product Selection */}
             <div className="space-y-3">
               <Label htmlFor="product-select" className="text-base font-semibold">

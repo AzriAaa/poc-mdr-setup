@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -106,12 +106,11 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
             <h3 className="text-xl sm:text-2xl font-bold">FPX</h3>
           </AccordionTrigger>
           <AccordionContent className="px-4 sm:px-6 pb-4 sm:pb-6">
-            {/* Send for Approval checkbox */}
-            <div className="flex items-center justify-end gap-2 mb-6">
-              <Checkbox id="send-approval" defaultChecked />
-              <label htmlFor="send-approval" className="text-sm font-medium cursor-pointer">
-                Send for Approval
-              </label>
+            {/* Existing Seller ID Badge */}
+            <div className="flex items-center justify-end mb-6">
+              <Badge variant="default">
+                Existing Seller ID
+              </Badge>
             </div>
 
       {/* MDR Section Header */}

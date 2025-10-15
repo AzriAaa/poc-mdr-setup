@@ -1,6 +1,5 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -106,13 +105,6 @@ export function CardSection({ selectedPlan, onFieldChange }: CardSectionProps) {
             <h3 className="text-xl sm:text-2xl font-bold">Card</h3>
           </AccordionTrigger>
           <AccordionContent className="px-4 sm:px-6 pb-4 sm:pb-6">
-            {/* Send for Approval checkbox */}
-            <div className="flex items-center justify-end gap-2 mb-6">
-              <Checkbox id="card-send-approval" defaultChecked />
-              <label htmlFor="card-send-approval" className="text-sm font-medium cursor-pointer">
-                Send for Approval
-              </label>
-            </div>
 
       {/* MDR Section Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">

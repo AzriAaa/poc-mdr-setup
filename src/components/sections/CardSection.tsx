@@ -89,7 +89,8 @@ export function CardSection({ selectedPlan, onFieldChange, planConfig }: CardSec
           <AccordionTrigger className="px-4 sm:px-6 hover:no-underline">
             <h3 className="text-xl sm:text-2xl font-bold">Card</h3>
           </AccordionTrigger>
-          <AccordionContent className="px-4 sm:px-6 pb-4 sm:pb-6" key={selectedPlan}>
+          <AccordionContent className="px-4 sm:px-6 pb-4 sm:pb-6">
+      <div key={selectedPlan}>
 
       {/* MID Configuration Section */}
       <div className="mb-8">
@@ -230,13 +231,13 @@ export function CardSection({ selectedPlan, onFieldChange, planConfig }: CardSec
         {mdrPlans.map((planId, index) => {
           const mdrPlanConfig = planConfig?.mdrPlans?.[index];
           return (
-          <div key={planId} className="border-l-4 border-blue-500 pl-4">
+          <div key={planId} className="border-l-4 border-blue-500 pl-4 animate-in fade-in slide-in-from-left-4 duration-300">
             <div className="flex items-center justify-between mb-4">
               <h5 className="font-semibold text-base">{mdrPlanConfig?.name || "Basic MDR Plan"}</h5>
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-8 w-8 p-0 text-destructive"
+                className="h-8 w-8 p-0 text-destructive hover:text-destructive hover:bg-destructive/10 transition-all duration-200 hover:scale-110"
                 onClick={() => removeMdrPlan(planId)}
               >
                 <Trash2 className="h-4 w-4" />
@@ -391,11 +392,12 @@ export function CardSection({ selectedPlan, onFieldChange, planConfig }: CardSec
       <div className="mt-6">
         <Button
           variant="outline"
-          className="w-full border-dashed border-2"
+          className="w-full border-dashed border-2 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
           onClick={addMdrPlan}
         >
-          <span className="text-blue-500">+ Add MDR</span>
+          <span className="text-blue-500 font-medium">+ Add MDR</span>
         </Button>
+      </div>
       </div>
           </AccordionContent>
         </Card>

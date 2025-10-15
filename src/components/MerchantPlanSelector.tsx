@@ -29,28 +29,163 @@ interface MerchantPlan {
   id: string;
   name: string;
   description: string;
+  supportedProducts: string[]; // Array of supported products
+  category: "standard" | "partner" | "premium" | "enterprise";
 }
 
 const MERCHANT_PLANS: MerchantPlan[] = [
+  // FPX Only Plans
   {
-    id: "starter",
-    name: "Starter Plan",
-    description: "Perfect for small businesses just getting started",
+    id: "fpx-basic",
+    name: "FPX Basic",
+    description: "Basic FPX banking integration for startups",
+    supportedProducts: ["FPX"],
+    category: "standard",
   },
   {
-    id: "professional",
-    name: "Professional Plan",
-    description: "Advanced features for growing businesses",
+    id: "fpx-business",
+    name: "FPX Business",
+    description: "Enhanced FPX features for growing businesses",
+    supportedProducts: ["FPX"],
+    category: "standard",
   },
   {
-    id: "enterprise",
-    name: "Enterprise Plan",
-    description: "Full suite for large-scale operations",
+    id: "fpx-partner",
+    name: "FPX Partner Plan",
+    description: "Special FPX rates and features for strategic partners",
+    supportedProducts: ["FPX"],
+    category: "partner",
   },
   {
-    id: "premium",
-    name: "Premium Plan",
-    description: "Maximum features with priority support",
+    id: "fpx-enterprise",
+    name: "FPX Enterprise",
+    description: "Premium FPX with dedicated support and custom rates",
+    supportedProducts: ["FPX"],
+    category: "enterprise",
+  },
+
+  // Card Only Plans
+  {
+    id: "card-starter",
+    name: "Card Starter",
+    description: "Essential card payment processing",
+    supportedProducts: ["Card"],
+    category: "standard",
+  },
+  {
+    id: "card-professional",
+    name: "Card Professional",
+    description: "Advanced card processing with fraud protection",
+    supportedProducts: ["Card"],
+    category: "standard",
+  },
+  {
+    id: "card-partner",
+    name: "Card Partner Plan",
+    description: "Exclusive card processing rates for partners",
+    supportedProducts: ["Card"],
+    category: "partner",
+  },
+  {
+    id: "card-premium",
+    name: "Card Premium",
+    description: "Top-tier card processing with lowest MDR rates",
+    supportedProducts: ["Card"],
+    category: "premium",
+  },
+
+  // E Wallet Only Plans
+  {
+    id: "ewallet-basic",
+    name: "E-Wallet Basic",
+    description: "Connect with popular e-wallet providers",
+    supportedProducts: ["E Wallet"],
+    category: "standard",
+  },
+  {
+    id: "ewallet-plus",
+    name: "E-Wallet Plus",
+    description: "Multi-wallet integration with analytics",
+    supportedProducts: ["E Wallet"],
+    category: "standard",
+  },
+  {
+    id: "ewallet-partner",
+    name: "E-Wallet Partner",
+    description: "Special e-wallet rates for certified partners",
+    supportedProducts: ["E Wallet"],
+    category: "partner",
+  },
+
+  // RHB DNQR Only Plans
+  {
+    id: "dnqr-standard",
+    name: "RHB DNQR Standard",
+    description: "QR payment solution for merchants",
+    supportedProducts: ["RHB DNQR"],
+    category: "standard",
+  },
+  {
+    id: "dnqr-partner",
+    name: "RHB DNQR Partner",
+    description: "Enhanced DNQR features for partners",
+    supportedProducts: ["RHB DNQR"],
+    category: "partner",
+  },
+
+  // Multi-Product Plans (FPX + Card)
+  {
+    id: "fpx-card-combo",
+    name: "FPX + Card Combo",
+    description: "Banking and card payments bundled",
+    supportedProducts: ["FPX", "Card"],
+    category: "standard",
+  },
+  {
+    id: "fpx-card-business",
+    name: "FPX + Card Business",
+    description: "Complete payment solution for growing businesses",
+    supportedProducts: ["FPX", "Card"],
+    category: "standard",
+  },
+  {
+    id: "fpx-card-partner",
+    name: "FPX + Card Partner",
+    description: "Strategic partner rates for bank and card payments",
+    supportedProducts: ["FPX", "Card"],
+    category: "partner",
+  },
+
+  // Multi-Product Plans (FPX + E Wallet)
+  {
+    id: "fpx-ewallet-combo",
+    name: "FPX + E-Wallet Combo",
+    description: "Bank transfers and e-wallet payments",
+    supportedProducts: ["FPX", "E Wallet"],
+    category: "standard",
+  },
+
+  // All Payment Methods
+  {
+    id: "omnichannel-standard",
+    name: "Omnichannel Standard",
+    description: "All payment methods for diverse customer base",
+    supportedProducts: ["FPX", "Card", "E Wallet", "RHB DNQR"],
+    category: "standard",
+  },
+  {
+    id: "omnichannel-partner",
+    name: "Omnichannel Partner",
+    description: "Full payment suite with partner privileges",
+    supportedProducts: ["FPX", "Card", "E Wallet", "RHB DNQR"],
+    category: "partner",
+  },
+  {
+    id: "omnichannel-enterprise",
+    name: "Omnichannel Enterprise",
+    description: "Ultimate payment solution with custom integrations",
+    supportedProducts: ["FPX", "Card", "E Wallet", "RHB DNQR"],
+    category: "enterprise",
   },
 ];
 
@@ -73,6 +208,21 @@ export function MerchantPlanSelector({
 
   const selectedPlanData = MERCHANT_PLANS.find((plan) => plan.id === selectedPlan);
   const isDisabled = selectedProducts.length === 0;
+
+  // Filter plans based on selected products
+  // A plan is available if its supportedProducts exactly matches the selectedProducts
+  const availablePlans = MERCHANT_PLANS.filter((plan) => {
+    if (selectedProducts.length === 0) return false;
+
+    // Check if the plan supports exactly the selected products
+    const planProducts = [...plan.supportedProducts].sort();
+    const selected = [...selectedProducts].sort();
+
+    return (
+      planProducts.length === selected.length &&
+      planProducts.every((product, index) => product === selected[index])
+    );
+  });
 
   const handlePlanSelect = (newPlan: string) => {
     // If trying to clear or change plan and there are field changes, show confirmation
@@ -133,9 +283,13 @@ export function MerchantPlanSelector({
           <PopoverContent className="w-full p-0" align="start">
             <Command>
               <CommandInput placeholder="Search plans..." />
-              <CommandEmpty>No plan found.</CommandEmpty>
+              <CommandEmpty>
+                {availablePlans.length === 0
+                  ? "No plans available for the selected products"
+                  : "No plan found."}
+              </CommandEmpty>
               <CommandGroup>
-                {MERCHANT_PLANS.map((plan) => (
+                {availablePlans.map((plan) => (
                   <CommandItem
                     key={plan.id}
                     value={plan.id}
@@ -147,8 +301,25 @@ export function MerchantPlanSelector({
                         selectedPlan === plan.id ? "opacity-100" : "opacity-0"
                       )}
                     />
-                    <div className="flex flex-col">
-                      <span className="font-medium">{plan.name}</span>
+                    <div className="flex flex-col flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">{plan.name}</span>
+                        {plan.category === "partner" && (
+                          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">
+                            Partner
+                          </span>
+                        )}
+                        {plan.category === "premium" && (
+                          <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded">
+                            Premium
+                          </span>
+                        )}
+                        {plan.category === "enterprise" && (
+                          <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded">
+                            Enterprise
+                          </span>
+                        )}
+                      </div>
                       <span className="text-sm text-muted-foreground">{plan.description}</span>
                     </div>
                   </CommandItem>

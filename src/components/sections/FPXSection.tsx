@@ -16,7 +16,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Edit2 } from "lucide-react";
+import { Edit2, Trash2 } from "lucide-react";
+import { useState } from "react";
 
 interface FPXSectionProps {
   selectedPlan: string;
@@ -98,6 +99,18 @@ const MDR_CONFIGS: MDRConfig[] = [
 ];
 
 export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
+  const [mdrPlans, setMdrPlans] = useState<number[]>([]);
+
+  const addMdrPlan = () => {
+    setMdrPlans([...mdrPlans, Date.now()]);
+    onFieldChange?.();
+  };
+
+  const removeMdrPlan = (id: number) => {
+    setMdrPlans(mdrPlans.filter(planId => planId !== id));
+    onFieldChange?.();
+  };
+
   return (
     <Accordion type="single" collapsible defaultValue="fpx-content">
       <AccordionItem value="fpx-content" className="border rounded-lg">
@@ -106,142 +119,41 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
             <h3 className="text-xl sm:text-2xl font-bold">FPX</h3>
           </AccordionTrigger>
           <AccordionContent className="px-4 sm:px-6 pb-4 sm:pb-6">
-            {/* Existing Seller ID Badge */}
-            <div className="flex items-center justify-end mb-6">
-              <Badge variant="default">
-                Existing Seller ID
-              </Badge>
-            </div>
-
-      {/* MDR Section Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <h4 className="text-lg sm:text-xl font-semibold">MDR</h4>
-        <Button variant="outline" size="sm" className="rounded-full w-full sm:w-auto">
-          Add MDR
-        </Button>
-      </div>
-
-      {/* MDR Configurations */}
-      <div className="space-y-8">
-        {MDR_CONFIGS.map((config, index) => (
-          <div key={index} className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {/* Condition Column */}
-            <Card className="p-4 bg-muted/30">
-              <div className="flex items-center justify-between mb-4">
-                <h5 className="font-semibold">Condition</h5>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                  <Edit2 className="h-4 w-4 text-blue-500" />
-                </Button>
-              </div>
-              <div className="space-y-3">
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                  <span className="text-sm text-muted-foreground">Account Type</span>
-                  <span className="text-sm font-medium">{config.condition.accountType}</span>
-                </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                  <span className="text-sm text-muted-foreground">Transaction Model</span>
-                  <span className="text-sm font-medium">{config.condition.transactionModel}</span>
-                </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                  <span className="text-sm text-muted-foreground">Transaction Status</span>
-                  <span className="text-sm font-medium">{config.condition.transactionStatus}</span>
-                </div>
-              </div>
-            </Card>
-
-            {/* Overall MDR Column */}
-            <Card className="p-4 bg-muted/30">
-              <div className="flex items-center justify-between mb-4">
-                <h5 className="font-semibold">Overall MDR</h5>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                  <Edit2 className="h-4 w-4 text-blue-500" />
-                </Button>
-              </div>
-              <div className="space-y-3">
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                  <span className="text-sm text-muted-foreground">MDR Type</span>
-                  <span className="text-sm font-medium">{config.overallMDR.mdrType}</span>
-                </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                  <span className="text-sm text-muted-foreground">MDR Value</span>
-                  <span className="text-sm font-medium">{config.overallMDR.mdrValue}</span>
-                </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                  <span className="text-sm text-muted-foreground">Minimum / Maximum (MYR)</span>
-                  <span className="text-sm font-medium">{config.overallMDR.minimumMaximum}</span>
-                </div>
-              </div>
-            </Card>
-
-            {/* Profit Sharing Column */}
-            <Card className="p-4 bg-muted/30">
-              <div className="flex items-center justify-between mb-4">
-                <h5 className="font-semibold">Profit Sharing</h5>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                  <Edit2 className="h-4 w-4 text-blue-500" />
-                </Button>
-              </div>
-              <div className="space-y-6">
-                {config.profitSharing.map((partner, pIndex) => (
-                  <div key={pIndex} className="space-y-2">
-                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                      <span className="text-sm text-muted-foreground">Partner</span>
-                      <span className="text-sm font-medium">{partner.partner}</span>
-                    </div>
-                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                      <span className="text-sm text-muted-foreground">To be Settled</span>
-                      <span className="text-sm font-medium">{partner.toBeSettled}</span>
-                    </div>
-                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                      <span className="text-sm text-muted-foreground">MDR Type / Value</span>
-                      <span className="text-sm font-medium">{partner.mdrTypeValue}</span>
-                    </div>
-                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                      <span className="text-sm text-muted-foreground">Minimum / Maximum (MYR)</span>
-                      <span className="text-sm font-medium">{partner.minimumMaximum}</span>
-                    </div>
-                    {pIndex < config.profitSharing.length - 1 && (
-                      <div className="border-t pt-4 mt-4" />
-                    )}
-                  </div>
-                ))}
-              </div>
-            </Card>
-          </div>
-        ))}
-      </div>
 
       {/* Seller ID Configuration Section */}
-      <div className="mt-8 sm:mt-12">
-        <h4 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6">Seller ID Configuration</h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <h4 className="text-base sm:text-lg font-semibold">Seller ID Configuration</h4>
+          <Badge variant="default">Existing Seller ID</Badge>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="fpx-exchange-id" className="text-sm text-muted-foreground">
+            <Label htmlFor="fpx-exchange-id-new" className="text-sm text-muted-foreground">
               FPX Exchange ID
             </Label>
             <Input
-              id="fpx-exchange-id"
-              value="EX000123"
+              id="fpx-exchange-id-new"
+              defaultValue="EX000123"
               readOnly
-              className="bg-background"
+              className="bg-muted/30"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="seller-id" className="text-sm text-muted-foreground">
+            <Label htmlFor="seller-id-new" className="text-sm text-muted-foreground">
               Seller ID
             </Label>
             <Input
-              id="seller-id"
+              id="seller-id-new"
               className="bg-background"
               onChange={onFieldChange}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="bank" className="text-sm text-muted-foreground">
+            <Label htmlFor="bank-new" className="text-sm text-muted-foreground">
               Bank
             </Label>
             <Select defaultValue="rhb-rhbmykl" onValueChange={onFieldChange}>
-              <SelectTrigger id="bank" className="bg-background">
+              <SelectTrigger id="bank-new" className="bg-background">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -252,11 +164,11 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="crediting-account" className="text-sm text-muted-foreground">
+            <Label htmlFor="crediting-account-new" className="text-sm text-muted-foreground">
               Crediting Account
             </Label>
             <Select defaultValue="acc20230901" onValueChange={onFieldChange}>
-              <SelectTrigger id="crediting-account" className="bg-background">
+              <SelectTrigger id="crediting-account-new" className="bg-background">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -269,15 +181,15 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
       </div>
 
       {/* Settlement Section */}
-      <div className="mt-8 sm:mt-12">
-        <h4 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6">Settlement</h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="mb-8">
+        <h4 className="text-base sm:text-lg font-semibold mb-4">Settlement</h4>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="settlement-mode" className="text-sm text-muted-foreground">
+            <Label htmlFor="settlement-mode-new" className="text-sm text-muted-foreground">
               Settlement Mode
             </Label>
             <Select defaultValue="delayed" onValueChange={onFieldChange}>
-              <SelectTrigger id="settlement-mode" className="bg-background">
+              <SelectTrigger id="settlement-mode-new" className="bg-background">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -287,25 +199,25 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="settlement-distribute" className="text-sm text-muted-foreground">
+            <Label htmlFor="settlement-distribute-new" className="text-sm text-muted-foreground">
               Settlement Distribute
             </Label>
             <Select defaultValue="split" onValueChange={onFieldChange}>
-              <SelectTrigger id="settlement-distribute" className="bg-background">
+              <SelectTrigger id="settlement-distribute-new" className="bg-background">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="split">Split</SelectItem>
-                <SelectItem value="full">Full</SelectItem>
+                <SelectItem value="self">Self</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="self-split" className="text-sm text-muted-foreground">
+            <Label htmlFor="self-split-new" className="text-sm text-muted-foreground">
               Self Split %
             </Label>
             <Input
-              id="self-split"
+              id="self-split-new"
               defaultValue="70"
               type="number"
               className="bg-background"
@@ -313,11 +225,11 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="master-split" className="text-sm text-muted-foreground">
+            <Label htmlFor="master-split-new" className="text-sm text-muted-foreground">
               Master Split %
             </Label>
             <Input
-              id="master-split"
+              id="master-split-new"
               defaultValue="30"
               type="number"
               className="bg-background"
@@ -325,11 +237,11 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="self-account" className="text-sm text-muted-foreground">
+            <Label htmlFor="self-account-new" className="text-sm text-muted-foreground">
               Self Account Number
             </Label>
             <Select defaultValue="1234567890123456" onValueChange={onFieldChange}>
-              <SelectTrigger id="self-account" className="bg-background">
+              <SelectTrigger id="self-account-new" className="bg-background">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -338,22 +250,22 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="master-account" className="text-sm text-muted-foreground">
+            <Label htmlFor="master-account-new" className="text-sm text-muted-foreground">
               Master Account Number
             </Label>
             <Input
-              id="master-account"
-              value="6234567890123444"
+              id="master-account-new"
+              defaultValue="6234567890123444"
               readOnly
-              className="bg-background"
+              className="bg-muted/30"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="settlement-day" className="text-sm text-muted-foreground">
+            <Label htmlFor="settlement-day-new" className="text-sm text-muted-foreground">
               Settlement Day
             </Label>
             <Select defaultValue="t1" onValueChange={onFieldChange}>
-              <SelectTrigger id="settlement-day" className="bg-background">
+              <SelectTrigger id="settlement-day-new" className="bg-background">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -364,11 +276,11 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="product-status" className="text-sm text-muted-foreground">
+            <Label htmlFor="product-status-new" className="text-sm text-muted-foreground">
               Product Status
             </Label>
             <Select defaultValue="inactive" onValueChange={onFieldChange}>
-              <SelectTrigger id="product-status" className="bg-background">
+              <SelectTrigger id="product-status-new" className="bg-background">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -378,6 +290,177 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
             </Select>
           </div>
         </div>
+      </div>
+
+      {/* MDR Plans Section */}
+      <div className="space-y-6">
+        {mdrPlans.map((planId) => (
+          <div key={planId} className="border-l-4 border-blue-500 pl-4">
+            <div className="flex items-center justify-between mb-4">
+              <h5 className="font-semibold text-base">Basic MDR Plan</h5>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 w-8 p-0 text-destructive"
+                onClick={() => removeMdrPlan(planId)}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {/* Condition */}
+            <div className="mb-6">
+              <h6 className="font-medium text-sm mb-3">Condition</h6>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Account Type</Label>
+                  <Select defaultValue="casa" onValueChange={onFieldChange}>
+                    <SelectTrigger className="bg-background">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="casa">CASA, CCA</SelectItem>
+                      <SelectItem value="cca">CCA</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Transaction Model</Label>
+                  <Select defaultValue="b2c" onValueChange={onFieldChange}>
+                    <SelectTrigger className="bg-background">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="b2c">B2C, B2B1</SelectItem>
+                      <SelectItem value="b2b1">B2B1</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Transaction Status</Label>
+                  <Select defaultValue="success" onValueChange={onFieldChange}>
+                    <SelectTrigger className="bg-background">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="success">Success</SelectItem>
+                      <SelectItem value="failed">Failed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </div>
+
+            {/* Overall MDR */}
+            <div className="mb-6">
+              <h6 className="font-medium text-sm mb-3">Overall MDR</h6>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">MDR Type</Label>
+                  <Select defaultValue="percentage" onValueChange={onFieldChange}>
+                    <SelectTrigger className="bg-background">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="percentage">Percentage</SelectItem>
+                      <SelectItem value="fixed">Fixed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">MDR Value (%)</Label>
+                  <Input
+                    defaultValue="1.00"
+                    type="number"
+                    step="0.01"
+                    className="bg-background"
+                    onChange={onFieldChange}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Minimum (MYR)</Label>
+                  <Input
+                    defaultValue="10.00"
+                    type="number"
+                    step="0.01"
+                    className="bg-background"
+                    onChange={onFieldChange}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Maximum (MYR)</Label>
+                  <Input
+                    defaultValue="100.00"
+                    type="number"
+                    step="0.01"
+                    className="bg-background"
+                    onChange={onFieldChange}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Profit Sharing */}
+            <div className="mb-4">
+              <h6 className="font-medium text-sm mb-3">Profit Sharing</h6>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">MDR Type</Label>
+                  <Select defaultValue="percentage" onValueChange={onFieldChange}>
+                    <SelectTrigger className="bg-background">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="percentage">Percentage</SelectItem>
+                      <SelectItem value="fixed">Fixed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">MDR Value (%)</Label>
+                  <Input
+                    defaultValue="1.00"
+                    type="number"
+                    step="0.01"
+                    className="bg-background"
+                    onChange={onFieldChange}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Minimum (MYR)</Label>
+                  <Input
+                    defaultValue="10.00"
+                    type="number"
+                    step="0.01"
+                    className="bg-background"
+                    onChange={onFieldChange}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Maximum (MYR)</Label>
+                  <Input
+                    defaultValue="100.00"
+                    type="number"
+                    step="0.01"
+                    className="bg-background"
+                    onChange={onFieldChange}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Add MDR Button */}
+      <div className="mt-6">
+        <Button
+          variant="outline"
+          className="w-full border-dashed border-2"
+          onClick={addMdrPlan}
+        >
+          <span className="text-blue-500">+ Add MDR</span>
+        </Button>
       </div>
           </AccordionContent>
         </Card>

@@ -15,88 +15,27 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Edit2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
+import { useState } from "react";
 
 interface CardSectionProps {
   selectedPlan: string;
   onFieldChange?: () => void;
 }
 
-interface MDRConfig {
-  condition: {
-    accountType: string;
-    transactionModel: string;
-    transactionStatus: string;
-  };
-  overallMDR: {
-    mdrType: string;
-    mdrValue: string;
-    minimumMaximum: string;
-  };
-  profitSharing: Array<{
-    partner: string;
-    toBeSettled: string;
-    mdrTypeValue: string;
-    minimumMaximum: string;
-  }>;
-}
-
-const MDR_CONFIGS: MDRConfig[] = [
-  {
-    condition: {
-      accountType: "Credit Card",
-      transactionModel: "Local",
-      transactionStatus: "Success",
-    },
-    overallMDR: {
-      mdrType: "Percentage",
-      mdrValue: "1.25",
-      minimumMaximum: "0.00/0.00",
-    },
-    profitSharing: [
-      {
-        partner: "IKEY Edutech",
-        toBeSettled: "No",
-        mdrTypeValue: "Percentage/0.20",
-        minimumMaximum: "0.00/0.00",
-      },
-      {
-        partner: "RinggitPay",
-        toBeSettled: "No",
-        mdrTypeValue: "Percentage/0.30",
-        minimumMaximum: "0.00/0.00",
-      },
-    ],
-  },
-  {
-    condition: {
-      accountType: "Debit Card",
-      transactionModel: "Foreign",
-      transactionStatus: "Success",
-    },
-    overallMDR: {
-      mdrType: "Percentage",
-      mdrValue: "1.50",
-      minimumMaximum: "0.00/0.00",
-    },
-    profitSharing: [
-      {
-        partner: "IKEY Edutech",
-        toBeSettled: "No",
-        mdrTypeValue: "Percentage/0.20",
-        minimumMaximum: "0.00/0.00",
-      },
-      {
-        partner: "RinggitPay",
-        toBeSettled: "No",
-        mdrTypeValue: "Percentage/0.30",
-        minimumMaximum: "0.00/0.00",
-      },
-    ],
-  },
-];
-
 export function CardSection({ selectedPlan, onFieldChange }: CardSectionProps) {
+  const [mdrPlans, setMdrPlans] = useState<number[]>([]);
+
+  const addMdrPlan = () => {
+    setMdrPlans([...mdrPlans, Date.now()]);
+    onFieldChange?.();
+  };
+
+  const removeMdrPlan = (id: number) => {
+    setMdrPlans(mdrPlans.filter(planId => planId !== id));
+    onFieldChange?.();
+  };
+
   return (
     <Accordion type="single" collapsible defaultValue="card-content">
       <AccordionItem value="card-content" className="border rounded-lg">
@@ -106,124 +45,26 @@ export function CardSection({ selectedPlan, onFieldChange }: CardSectionProps) {
           </AccordionTrigger>
           <AccordionContent className="px-4 sm:px-6 pb-4 sm:pb-6">
 
-      {/* MDR Section Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <h4 className="text-lg sm:text-xl font-semibold">MDR</h4>
-        <Button variant="outline" size="sm" className="rounded-full w-full sm:w-auto">
-          Add MDR
-        </Button>
-      </div>
-
-      {/* MDR Configurations */}
-      <div className="space-y-8">
-        {MDR_CONFIGS.map((config, index) => (
-          <div key={index} className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {/* Condition Column */}
-            <Card className="p-4 bg-muted/30">
-              <div className="flex items-center justify-between mb-4">
-                <h5 className="font-semibold">Condition</h5>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                  <Edit2 className="h-4 w-4 text-blue-500" />
-                </Button>
-              </div>
-              <div className="space-y-3">
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                  <span className="text-sm text-muted-foreground">Account Type</span>
-                  <span className="text-sm font-medium">{config.condition.accountType}</span>
-                </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                  <span className="text-sm text-muted-foreground">Transaction Model</span>
-                  <span className="text-sm font-medium">{config.condition.transactionModel}</span>
-                </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                  <span className="text-sm text-muted-foreground">Transaction Status</span>
-                  <span className="text-sm font-medium">{config.condition.transactionStatus}</span>
-                </div>
-              </div>
-            </Card>
-
-            {/* Overall MDR Column */}
-            <Card className="p-4 bg-muted/30">
-              <div className="flex items-center justify-between mb-4">
-                <h5 className="font-semibold">Overall MDR</h5>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                  <Edit2 className="h-4 w-4 text-blue-500" />
-                </Button>
-              </div>
-              <div className="space-y-3">
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                  <span className="text-sm text-muted-foreground">MDR Type</span>
-                  <span className="text-sm font-medium">{config.overallMDR.mdrType}</span>
-                </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                  <span className="text-sm text-muted-foreground">MDR Value</span>
-                  <span className="text-sm font-medium">{config.overallMDR.mdrValue}</span>
-                </div>
-                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                  <span className="text-sm text-muted-foreground">Minimum / Maximum (MYR)</span>
-                  <span className="text-sm font-medium">{config.overallMDR.minimumMaximum}</span>
-                </div>
-              </div>
-            </Card>
-
-            {/* Profit Sharing Column */}
-            <Card className="p-4 bg-muted/30">
-              <div className="flex items-center justify-between mb-4">
-                <h5 className="font-semibold">Profit Sharing</h5>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                  <Edit2 className="h-4 w-4 text-blue-500" />
-                </Button>
-              </div>
-              <div className="space-y-6">
-                {config.profitSharing.map((partner, pIndex) => (
-                  <div key={pIndex} className="space-y-2">
-                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                      <span className="text-sm text-muted-foreground">Partner</span>
-                      <span className="text-sm font-medium">{partner.partner}</span>
-                    </div>
-                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                      <span className="text-sm text-muted-foreground">To be Settled</span>
-                      <span className="text-sm font-medium">{partner.toBeSettled}</span>
-                    </div>
-                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                      <span className="text-sm text-muted-foreground">MDR Type / Value</span>
-                      <span className="text-sm font-medium">{partner.mdrTypeValue}</span>
-                    </div>
-                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                      <span className="text-sm text-muted-foreground">Minimum / Maximum (MYR)</span>
-                      <span className="text-sm font-medium">{partner.minimumMaximum}</span>
-                    </div>
-                    {pIndex < config.profitSharing.length - 1 && (
-                      <div className="border-t pt-4 mt-4" />
-                    )}
-                  </div>
-                ))}
-              </div>
-            </Card>
-          </div>
-        ))}
-      </div>
-
       {/* MID Configuration Section */}
-      <div className="mt-8 sm:mt-12">
-        <h4 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6">MID Configuration</h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="mb-8">
+        <h4 className="text-base sm:text-lg font-semibold mb-4">MID Configuration</h4>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="card-exchange-id" className="text-sm text-muted-foreground">
+            <Label htmlFor="card-exchange-id-new" className="text-sm text-muted-foreground">
               Card Exchange ID
             </Label>
             <Input
-              id="card-exchange-id"
+              id="card-exchange-id-new"
               className="bg-background"
               onChange={onFieldChange}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="card-domain-id" className="text-sm text-muted-foreground">
+            <Label htmlFor="card-domain-id-new" className="text-sm text-muted-foreground">
               Card Domain ID
             </Label>
             <Select onValueChange={onFieldChange}>
-              <SelectTrigger id="card-domain-id" className="bg-background">
+              <SelectTrigger id="card-domain-id-new" className="bg-background">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -233,21 +74,21 @@ export function CardSection({ selectedPlan, onFieldChange }: CardSectionProps) {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="merchant-id" className="text-sm text-muted-foreground">
+            <Label htmlFor="merchant-id-new" className="text-sm text-muted-foreground">
               Merchant ID
             </Label>
             <Input
-              id="merchant-id"
+              id="merchant-id-new"
               className="bg-background"
               onChange={onFieldChange}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-sm text-muted-foreground">
+            <Label htmlFor="password-new" className="text-sm text-muted-foreground">
               Password
             </Label>
             <Input
-              id="password"
+              id="password-new"
               type="password"
               className="bg-background"
               onChange={onFieldChange}
@@ -257,15 +98,15 @@ export function CardSection({ selectedPlan, onFieldChange }: CardSectionProps) {
       </div>
 
       {/* Settlement Section */}
-      <div className="mt-8 sm:mt-12">
-        <h4 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6">Settlement</h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="mb-8">
+        <h4 className="text-base sm:text-lg font-semibold mb-4">Settlement</h4>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="card-settlement-mode" className="text-sm text-muted-foreground">
+            <Label htmlFor="card-settlement-mode-new" className="text-sm text-muted-foreground">
               Settlement Mode
             </Label>
             <Select defaultValue="realtime" onValueChange={onFieldChange}>
-              <SelectTrigger id="card-settlement-mode" className="bg-background">
+              <SelectTrigger id="card-settlement-mode-new" className="bg-background">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -275,11 +116,11 @@ export function CardSection({ selectedPlan, onFieldChange }: CardSectionProps) {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="card-settlement-distribute" className="text-sm text-muted-foreground">
+            <Label htmlFor="card-settlement-distribute-new" className="text-sm text-muted-foreground">
               Settlement Distribute
             </Label>
             <Select defaultValue="self" onValueChange={onFieldChange}>
-              <SelectTrigger id="card-settlement-distribute" className="bg-background">
+              <SelectTrigger id="card-settlement-distribute-new" className="bg-background">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -289,11 +130,11 @@ export function CardSection({ selectedPlan, onFieldChange }: CardSectionProps) {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="card-settlement-day" className="text-sm text-muted-foreground">
+            <Label htmlFor="card-settlement-day-new" className="text-sm text-muted-foreground">
               Settlement Day
             </Label>
             <Select defaultValue="t0" onValueChange={onFieldChange}>
-              <SelectTrigger id="card-settlement-day" className="bg-background">
+              <SelectTrigger id="card-settlement-day-new" className="bg-background">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -304,11 +145,11 @@ export function CardSection({ selectedPlan, onFieldChange }: CardSectionProps) {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="card-self-account" className="text-sm text-muted-foreground">
+            <Label htmlFor="card-self-account-new" className="text-sm text-muted-foreground">
               Self Account Number
             </Label>
             <Select defaultValue="1234567890123456" onValueChange={onFieldChange}>
-              <SelectTrigger id="card-self-account" className="bg-background">
+              <SelectTrigger id="card-self-account-new" className="bg-background">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -317,11 +158,11 @@ export function CardSection({ selectedPlan, onFieldChange }: CardSectionProps) {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="card-product-status" className="text-sm text-muted-foreground">
+            <Label htmlFor="card-product-status-new" className="text-sm text-muted-foreground">
               Product Status
             </Label>
             <Select defaultValue="inactive" onValueChange={onFieldChange}>
-              <SelectTrigger id="card-product-status" className="bg-background">
+              <SelectTrigger id="card-product-status-new" className="bg-background">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -331,6 +172,177 @@ export function CardSection({ selectedPlan, onFieldChange }: CardSectionProps) {
             </Select>
           </div>
         </div>
+      </div>
+
+      {/* MDR Plans Section */}
+      <div className="space-y-6">
+        {mdrPlans.map((planId) => (
+          <div key={planId} className="border-l-4 border-blue-500 pl-4">
+            <div className="flex items-center justify-between mb-4">
+              <h5 className="font-semibold text-base">Basic MDR Plan</h5>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 w-8 p-0 text-destructive"
+                onClick={() => removeMdrPlan(planId)}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {/* Condition */}
+            <div className="mb-6">
+              <h6 className="font-medium text-sm mb-3">Condition</h6>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Account Type</Label>
+                  <Select defaultValue="credit" onValueChange={onFieldChange}>
+                    <SelectTrigger className="bg-background">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="credit">Credit Card</SelectItem>
+                      <SelectItem value="debit">Debit Card</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Transaction Model</Label>
+                  <Select defaultValue="local" onValueChange={onFieldChange}>
+                    <SelectTrigger className="bg-background">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="local">Local</SelectItem>
+                      <SelectItem value="foreign">Foreign</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Transaction Status</Label>
+                  <Select defaultValue="success" onValueChange={onFieldChange}>
+                    <SelectTrigger className="bg-background">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="success">Success</SelectItem>
+                      <SelectItem value="failed">Failed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </div>
+
+            {/* Overall MDR */}
+            <div className="mb-6">
+              <h6 className="font-medium text-sm mb-3">Overall MDR</h6>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">MDR Type</Label>
+                  <Select defaultValue="percentage" onValueChange={onFieldChange}>
+                    <SelectTrigger className="bg-background">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="percentage">Percentage</SelectItem>
+                      <SelectItem value="fixed">Fixed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">MDR Value (%)</Label>
+                  <Input
+                    defaultValue="1.25"
+                    type="number"
+                    step="0.01"
+                    className="bg-background"
+                    onChange={onFieldChange}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Minimum (MYR)</Label>
+                  <Input
+                    defaultValue="10.00"
+                    type="number"
+                    step="0.01"
+                    className="bg-background"
+                    onChange={onFieldChange}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Maximum (MYR)</Label>
+                  <Input
+                    defaultValue="100.00"
+                    type="number"
+                    step="0.01"
+                    className="bg-background"
+                    onChange={onFieldChange}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Profit Sharing */}
+            <div className="mb-4">
+              <h6 className="font-medium text-sm mb-3">Profit Sharing</h6>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">MDR Type</Label>
+                  <Select defaultValue="percentage" onValueChange={onFieldChange}>
+                    <SelectTrigger className="bg-background">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="percentage">Percentage</SelectItem>
+                      <SelectItem value="fixed">Fixed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">MDR Value (%)</Label>
+                  <Input
+                    defaultValue="1.00"
+                    type="number"
+                    step="0.01"
+                    className="bg-background"
+                    onChange={onFieldChange}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Minimum (MYR)</Label>
+                  <Input
+                    defaultValue="10.00"
+                    type="number"
+                    step="0.01"
+                    className="bg-background"
+                    onChange={onFieldChange}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Maximum (MYR)</Label>
+                  <Input
+                    defaultValue="100.00"
+                    type="number"
+                    step="0.01"
+                    className="bg-background"
+                    onChange={onFieldChange}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Add MDR Button */}
+      <div className="mt-6">
+        <Button
+          variant="outline"
+          className="w-full border-dashed border-2"
+          onClick={addMdrPlan}
+        >
+          <span className="text-blue-500">+ Add MDR</span>
+        </Button>
       </div>
           </AccordionContent>
         </Card>

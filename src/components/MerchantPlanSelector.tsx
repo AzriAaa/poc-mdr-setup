@@ -31,9 +31,137 @@ interface MerchantPlan {
   description: string;
   supportedProducts: string[]; // Array of supported products
   category: "standard" | "partner" | "premium" | "enterprise";
+  fpxConfig?: {
+    settlement: {
+      settlementMode: string;
+      settlementDistribute: string;
+      selfSplitPercent: string;
+      masterSplitPercent: string;
+      selfAccountNumber: string;
+      settlementDay: string;
+      productStatus: string;
+    };
+    mdrPlans: Array<{
+      name: string;
+      condition: {
+        accountType: string;
+        transactionModel: string;
+        transactionStatus: string;
+      };
+      overallMDR: {
+        mdrType: string;
+        mdrValue: string;
+        minimum: string;
+        maximum: string;
+      };
+      profitSharing: {
+        mdrType: string;
+        mdrValue: string;
+        minimum: string;
+        maximum: string;
+      };
+    }>;
+  };
+  cardConfig?: {
+    midConfig: {
+      cardExchangeId: string;
+      cardDomainId: string;
+      merchantId: string;
+      password: string;
+    };
+    settlement: {
+      settlementMode: string;
+      settlementDistribute: string;
+      settlementDay: string;
+      selfAccountNumber: string;
+      productStatus: string;
+    };
+    mdrPlans: Array<{
+      name: string;
+      condition: {
+        accountType: string;
+        transactionModel: string;
+        transactionStatus: string;
+      };
+      overallMDR: {
+        mdrType: string;
+        mdrValue: string;
+        minimum: string;
+        maximum: string;
+      };
+      profitSharing: {
+        mdrType: string;
+        mdrValue: string;
+        minimum: string;
+        maximum: string;
+      };
+    }>;
+  };
+  ewalletConfig?: {
+    settlement: {
+      settlementMode: string;
+      settlementDistribute: string;
+      selfSplitPercent: string;
+      masterSplitPercent: string;
+      selfAccountNumber: string;
+      settlementDay: string;
+      productStatus: string;
+    };
+    mdrPlans: Array<{
+      name: string;
+      condition: {
+        accountType: string;
+        transactionModel: string;
+        transactionStatus: string;
+      };
+      overallMDR: {
+        mdrType: string;
+        mdrValue: string;
+        minimum: string;
+        maximum: string;
+      };
+      profitSharing: {
+        mdrType: string;
+        mdrValue: string;
+        minimum: string;
+        maximum: string;
+      };
+    }>;
+  };
+  dnqrConfig?: {
+    settlement: {
+      settlementMode: string;
+      settlementDistribute: string;
+      selfSplitPercent: string;
+      masterSplitPercent: string;
+      selfAccountNumber: string;
+      settlementDay: string;
+      productStatus: string;
+    };
+    mdrPlans: Array<{
+      name: string;
+      condition: {
+        accountType: string;
+        transactionModel: string;
+        transactionStatus: string;
+      };
+      overallMDR: {
+        mdrType: string;
+        mdrValue: string;
+        minimum: string;
+        maximum: string;
+      };
+      profitSharing: {
+        mdrType: string;
+        mdrValue: string;
+        minimum: string;
+        maximum: string;
+      };
+    }>;
+  };
 }
 
-const MERCHANT_PLANS: MerchantPlan[] = [
+export const MERCHANT_PLANS: MerchantPlan[] = [
   // FPX Only Plans
   {
     id: "fpx-basic",
@@ -41,6 +169,79 @@ const MERCHANT_PLANS: MerchantPlan[] = [
     description: "Basic FPX banking integration for startups",
     supportedProducts: ["FPX"],
     category: "standard",
+    fpxConfig: {
+      settlement: {
+        settlementMode: "delayed",
+        settlementDistribute: "split",
+        selfSplitPercent: "70",
+        masterSplitPercent: "30",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t1",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.00",
+            minimum: "10.00",
+            maximum: "100.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.50",
+            minimum: "5.00",
+            maximum: "50.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "cca",
+            transactionModel: "b2b1",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.20",
+            minimum: "12.00",
+            maximum: "120.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.60",
+            minimum: "6.00",
+            maximum: "60.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "2.00",
+            minimum: "15.00",
+            maximum: "150.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "1.00",
+            minimum: "7.50",
+            maximum: "75.00",
+          },
+        },
+      ],
+    },
   },
   {
     id: "fpx-business",
@@ -48,6 +249,79 @@ const MERCHANT_PLANS: MerchantPlan[] = [
     description: "Enhanced FPX features for growing businesses",
     supportedProducts: ["FPX"],
     category: "standard",
+    fpxConfig: {
+      settlement: {
+        settlementMode: "delayed",
+        settlementDistribute: "split",
+        selfSplitPercent: "75",
+        masterSplitPercent: "25",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t1",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.95",
+            minimum: "9.00",
+            maximum: "95.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.45",
+            minimum: "4.50",
+            maximum: "45.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "cca",
+            transactionModel: "b2b1",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.15",
+            minimum: "11.50",
+            maximum: "115.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.55",
+            minimum: "5.50",
+            maximum: "55.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "1.80",
+            minimum: "14.00",
+            maximum: "140.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "0.90",
+            minimum: "7.00",
+            maximum: "70.00",
+          },
+        },
+      ],
+    },
   },
   {
     id: "fpx-partner",
@@ -55,6 +329,79 @@ const MERCHANT_PLANS: MerchantPlan[] = [
     description: "Special FPX rates and features for strategic partners",
     supportedProducts: ["FPX"],
     category: "partner",
+    fpxConfig: {
+      settlement: {
+        settlementMode: "instant",
+        settlementDistribute: "split",
+        selfSplitPercent: "80",
+        masterSplitPercent: "20",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t0",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.80",
+            minimum: "8.00",
+            maximum: "80.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.40",
+            minimum: "4.00",
+            maximum: "40.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "cca",
+            transactionModel: "b2b1",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.95",
+            minimum: "9.50",
+            maximum: "95.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.50",
+            minimum: "5.00",
+            maximum: "50.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "1.50",
+            minimum: "12.00",
+            maximum: "120.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "0.75",
+            minimum: "6.00",
+            maximum: "60.00",
+          },
+        },
+      ],
+    },
   },
   {
     id: "fpx-enterprise",
@@ -62,6 +409,79 @@ const MERCHANT_PLANS: MerchantPlan[] = [
     description: "Premium FPX with dedicated support and custom rates",
     supportedProducts: ["FPX"],
     category: "enterprise",
+    fpxConfig: {
+      settlement: {
+        settlementMode: "instant",
+        settlementDistribute: "split",
+        selfSplitPercent: "85",
+        masterSplitPercent: "15",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t0",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.65",
+            minimum: "6.50",
+            maximum: "65.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.35",
+            minimum: "3.50",
+            maximum: "35.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "cca",
+            transactionModel: "b2b1",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.75",
+            minimum: "7.50",
+            maximum: "75.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.40",
+            minimum: "4.00",
+            maximum: "40.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "1.20",
+            minimum: "10.00",
+            maximum: "100.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "0.60",
+            minimum: "5.00",
+            maximum: "50.00",
+          },
+        },
+      ],
+    },
   },
 
   // Card Only Plans
@@ -71,6 +491,83 @@ const MERCHANT_PLANS: MerchantPlan[] = [
     description: "Essential card payment processing",
     supportedProducts: ["Card"],
     category: "standard",
+    cardConfig: {
+      midConfig: {
+        cardExchangeId: "CEX-STR-4567",
+        cardDomainId: "domain1",
+        merchantId: "MID-STARTER-123456",
+        password: "",
+      },
+      settlement: {
+        settlementMode: "delayed",
+        settlementDistribute: "full",
+        settlementDay: "t2",
+        selfAccountNumber: "1234567890123456",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "online",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "2.50",
+            minimum: "15.00",
+            maximum: "200.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "1.25",
+            minimum: "7.50",
+            maximum: "100.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "pos",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "2.20",
+            minimum: "12.00",
+            maximum: "180.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "1.10",
+            minimum: "6.00",
+            maximum: "90.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "online",
+            transactionStatus: "chargeback",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "5.00",
+            minimum: "20.00",
+            maximum: "250.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "2.50",
+            minimum: "10.00",
+            maximum: "125.00",
+          },
+        },
+      ],
+    },
   },
   {
     id: "card-professional",
@@ -78,6 +575,83 @@ const MERCHANT_PLANS: MerchantPlan[] = [
     description: "Advanced card processing with fraud protection",
     supportedProducts: ["Card"],
     category: "standard",
+    cardConfig: {
+      midConfig: {
+        cardExchangeId: "CEX-PRO-7890",
+        cardDomainId: "domain1",
+        merchantId: "MID-PROFESSIONAL-234567",
+        password: "",
+      },
+      settlement: {
+        settlementMode: "delayed",
+        settlementDistribute: "full",
+        settlementDay: "t1",
+        selfAccountNumber: "1234567890123456",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "online",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "2.30",
+            minimum: "14.00",
+            maximum: "190.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "1.15",
+            minimum: "7.00",
+            maximum: "95.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "pos",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "2.00",
+            minimum: "11.00",
+            maximum: "170.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "1.00",
+            minimum: "5.50",
+            maximum: "85.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "online",
+            transactionStatus: "chargeback",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "4.50",
+            minimum: "18.00",
+            maximum: "230.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "2.25",
+            minimum: "9.00",
+            maximum: "115.00",
+          },
+        },
+      ],
+    },
   },
   {
     id: "card-partner",
@@ -85,6 +659,83 @@ const MERCHANT_PLANS: MerchantPlan[] = [
     description: "Exclusive card processing rates for partners",
     supportedProducts: ["Card"],
     category: "partner",
+    cardConfig: {
+      midConfig: {
+        cardExchangeId: "CEX-PTR-2345",
+        cardDomainId: "domain-partner",
+        merchantId: "MID-PARTNER-345678",
+        password: "",
+      },
+      settlement: {
+        settlementMode: "instant",
+        settlementDistribute: "full",
+        settlementDay: "t0",
+        selfAccountNumber: "1234567890123456",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "online",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "2.00",
+            minimum: "12.00",
+            maximum: "170.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "1.00",
+            minimum: "6.00",
+            maximum: "85.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "pos",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.80",
+            minimum: "10.00",
+            maximum: "150.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.90",
+            minimum: "5.00",
+            maximum: "75.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "online",
+            transactionStatus: "chargeback",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "4.00",
+            minimum: "16.00",
+            maximum: "200.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "2.00",
+            minimum: "8.00",
+            maximum: "100.00",
+          },
+        },
+      ],
+    },
   },
   {
     id: "card-premium",
@@ -92,6 +743,83 @@ const MERCHANT_PLANS: MerchantPlan[] = [
     description: "Top-tier card processing with lowest MDR rates",
     supportedProducts: ["Card"],
     category: "premium",
+    cardConfig: {
+      midConfig: {
+        cardExchangeId: "CEX-PRM-8901",
+        cardDomainId: "domain2",
+        merchantId: "MID-PREMIUM-456789",
+        password: "",
+      },
+      settlement: {
+        settlementMode: "instant",
+        settlementDistribute: "full",
+        settlementDay: "t0",
+        selfAccountNumber: "1234567890123456",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "online",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.70",
+            minimum: "10.00",
+            maximum: "150.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.85",
+            minimum: "5.00",
+            maximum: "75.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "pos",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.50",
+            minimum: "8.00",
+            maximum: "130.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.75",
+            minimum: "4.00",
+            maximum: "65.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "online",
+            transactionStatus: "chargeback",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "3.50",
+            minimum: "14.00",
+            maximum: "180.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "1.75",
+            minimum: "7.00",
+            maximum: "90.00",
+          },
+        },
+      ],
+    },
   },
 
   // E Wallet Only Plans
@@ -101,6 +829,79 @@ const MERCHANT_PLANS: MerchantPlan[] = [
     description: "Connect with popular e-wallet providers",
     supportedProducts: ["E Wallet"],
     category: "standard",
+    ewalletConfig: {
+      settlement: {
+        settlementMode: "delayed",
+        settlementDistribute: "split",
+        selfSplitPercent: "65",
+        masterSplitPercent: "35",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t1",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "personal",
+            transactionModel: "p2m",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.50",
+            minimum: "8.00",
+            maximum: "120.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.75",
+            minimum: "4.00",
+            maximum: "60.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "business",
+            transactionModel: "p2m",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.70",
+            minimum: "9.00",
+            maximum: "130.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.85",
+            minimum: "4.50",
+            maximum: "65.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "personal",
+            transactionModel: "p2p",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "2.50",
+            minimum: "10.00",
+            maximum: "150.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "1.25",
+            minimum: "5.00",
+            maximum: "75.00",
+          },
+        },
+      ],
+    },
   },
   {
     id: "ewallet-plus",
@@ -108,6 +909,79 @@ const MERCHANT_PLANS: MerchantPlan[] = [
     description: "Multi-wallet integration with analytics",
     supportedProducts: ["E Wallet"],
     category: "standard",
+    ewalletConfig: {
+      settlement: {
+        settlementMode: "delayed",
+        settlementDistribute: "split",
+        selfSplitPercent: "70",
+        masterSplitPercent: "30",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t1",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "personal",
+            transactionModel: "p2m",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.35",
+            minimum: "7.50",
+            maximum: "110.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.65",
+            minimum: "3.75",
+            maximum: "55.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "business",
+            transactionModel: "p2m",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.55",
+            minimum: "8.50",
+            maximum: "120.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.75",
+            minimum: "4.25",
+            maximum: "60.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "personal",
+            transactionModel: "p2p",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "2.20",
+            minimum: "9.00",
+            maximum: "140.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "1.10",
+            minimum: "4.50",
+            maximum: "70.00",
+          },
+        },
+      ],
+    },
   },
   {
     id: "ewallet-partner",
@@ -115,6 +989,79 @@ const MERCHANT_PLANS: MerchantPlan[] = [
     description: "Special e-wallet rates for certified partners",
     supportedProducts: ["E Wallet"],
     category: "partner",
+    ewalletConfig: {
+      settlement: {
+        settlementMode: "instant",
+        settlementDistribute: "split",
+        selfSplitPercent: "75",
+        masterSplitPercent: "25",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t0",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "personal",
+            transactionModel: "p2m",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.10",
+            minimum: "6.00",
+            maximum: "90.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.55",
+            minimum: "3.00",
+            maximum: "45.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "business",
+            transactionModel: "p2m",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.25",
+            minimum: "7.00",
+            maximum: "100.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.65",
+            minimum: "3.50",
+            maximum: "50.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "personal",
+            transactionModel: "p2p",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "1.80",
+            minimum: "8.00",
+            maximum: "120.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "0.90",
+            minimum: "4.00",
+            maximum: "60.00",
+          },
+        },
+      ],
+    },
   },
 
   // RHB DNQR Only Plans
@@ -124,6 +1071,79 @@ const MERCHANT_PLANS: MerchantPlan[] = [
     description: "QR payment solution for merchants",
     supportedProducts: ["RHB DNQR"],
     category: "standard",
+    dnqrConfig: {
+      settlement: {
+        settlementMode: "delayed",
+        settlementDistribute: "split",
+        selfSplitPercent: "70",
+        masterSplitPercent: "30",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t1",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "static",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.80",
+            minimum: "5.00",
+            maximum: "80.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.40",
+            minimum: "2.50",
+            maximum: "40.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "business",
+            transactionModel: "dynamic",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.95",
+            minimum: "6.00",
+            maximum: "90.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.45",
+            minimum: "3.00",
+            maximum: "45.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "static",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "1.50",
+            minimum: "7.50",
+            maximum: "100.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "0.75",
+            minimum: "3.75",
+            maximum: "50.00",
+          },
+        },
+      ],
+    },
   },
   {
     id: "dnqr-partner",
@@ -131,6 +1151,79 @@ const MERCHANT_PLANS: MerchantPlan[] = [
     description: "Enhanced DNQR features for partners",
     supportedProducts: ["RHB DNQR"],
     category: "partner",
+    dnqrConfig: {
+      settlement: {
+        settlementMode: "instant",
+        settlementDistribute: "split",
+        selfSplitPercent: "75",
+        masterSplitPercent: "25",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t0",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "static",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.65",
+            minimum: "4.00",
+            maximum: "70.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.35",
+            minimum: "2.00",
+            maximum: "35.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "business",
+            transactionModel: "dynamic",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.75",
+            minimum: "5.00",
+            maximum: "75.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.40",
+            minimum: "2.50",
+            maximum: "37.50",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "static",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "1.20",
+            minimum: "6.00",
+            maximum: "85.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "0.60",
+            minimum: "3.00",
+            maximum: "42.50",
+          },
+        },
+      ],
+    },
   },
 
   // Multi-Product Plans (FPX + Card)
@@ -140,6 +1233,156 @@ const MERCHANT_PLANS: MerchantPlan[] = [
     description: "Banking and card payments bundled",
     supportedProducts: ["FPX", "Card"],
     category: "standard",
+    fpxConfig: {
+      settlement: {
+        settlementMode: "delayed",
+        settlementDistribute: "split",
+        selfSplitPercent: "70",
+        masterSplitPercent: "30",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t1",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.00",
+            minimum: "10.00",
+            maximum: "100.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.50",
+            minimum: "5.00",
+            maximum: "50.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "cca",
+            transactionModel: "b2b1",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.20",
+            minimum: "12.00",
+            maximum: "120.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.60",
+            minimum: "6.00",
+            maximum: "60.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "2.00",
+            minimum: "15.00",
+            maximum: "150.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "1.00",
+            minimum: "7.50",
+            maximum: "75.00",
+          },
+        },
+      ],
+    },
+    cardConfig: {
+      midConfig: {
+        cardExchangeId: "CEX-CMB-1234",
+        cardDomainId: "domain1",
+        merchantId: "MID-COMBO-567890",
+        password: "",
+      },
+      settlement: {
+        settlementMode: "delayed",
+        settlementDistribute: "full",
+        settlementDay: "t2",
+        selfAccountNumber: "1234567890123456",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "online",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "2.50",
+            minimum: "15.00",
+            maximum: "200.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "1.25",
+            minimum: "7.50",
+            maximum: "100.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "pos",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "2.20",
+            minimum: "12.00",
+            maximum: "180.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "1.10",
+            minimum: "6.00",
+            maximum: "90.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "online",
+            transactionStatus: "chargeback",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "5.00",
+            minimum: "20.00",
+            maximum: "250.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "2.50",
+            minimum: "10.00",
+            maximum: "125.00",
+          },
+        },
+      ],
+    },
   },
   {
     id: "fpx-card-business",
@@ -147,6 +1390,156 @@ const MERCHANT_PLANS: MerchantPlan[] = [
     description: "Complete payment solution for growing businesses",
     supportedProducts: ["FPX", "Card"],
     category: "standard",
+    fpxConfig: {
+      settlement: {
+        settlementMode: "delayed",
+        settlementDistribute: "split",
+        selfSplitPercent: "75",
+        masterSplitPercent: "25",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t1",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.95",
+            minimum: "9.00",
+            maximum: "95.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.45",
+            minimum: "4.50",
+            maximum: "45.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "cca",
+            transactionModel: "b2b1",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.15",
+            minimum: "11.50",
+            maximum: "115.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.55",
+            minimum: "5.50",
+            maximum: "55.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "1.80",
+            minimum: "14.00",
+            maximum: "140.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "0.90",
+            minimum: "7.00",
+            maximum: "70.00",
+          },
+        },
+      ],
+    },
+    cardConfig: {
+      midConfig: {
+        cardExchangeId: "CEX-BUS-5678",
+        cardDomainId: "domain1",
+        merchantId: "MID-BUSINESS-678901",
+        password: "",
+      },
+      settlement: {
+        settlementMode: "delayed",
+        settlementDistribute: "full",
+        settlementDay: "t1",
+        selfAccountNumber: "1234567890123456",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "online",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "2.30",
+            minimum: "14.00",
+            maximum: "190.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "1.15",
+            minimum: "7.00",
+            maximum: "95.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "pos",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "2.00",
+            minimum: "11.00",
+            maximum: "170.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "1.00",
+            minimum: "5.50",
+            maximum: "85.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "online",
+            transactionStatus: "chargeback",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "4.50",
+            minimum: "18.00",
+            maximum: "230.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "2.25",
+            minimum: "9.00",
+            maximum: "115.00",
+          },
+        },
+      ],
+    },
   },
   {
     id: "fpx-card-partner",
@@ -154,6 +1547,156 @@ const MERCHANT_PLANS: MerchantPlan[] = [
     description: "Strategic partner rates for bank and card payments",
     supportedProducts: ["FPX", "Card"],
     category: "partner",
+    fpxConfig: {
+      settlement: {
+        settlementMode: "instant",
+        settlementDistribute: "split",
+        selfSplitPercent: "80",
+        masterSplitPercent: "20",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t0",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.80",
+            minimum: "8.00",
+            maximum: "80.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.40",
+            minimum: "4.00",
+            maximum: "40.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "cca",
+            transactionModel: "b2b1",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.95",
+            minimum: "9.50",
+            maximum: "95.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.50",
+            minimum: "5.00",
+            maximum: "50.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "1.50",
+            minimum: "12.00",
+            maximum: "120.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "0.75",
+            minimum: "6.00",
+            maximum: "60.00",
+          },
+        },
+      ],
+    },
+    cardConfig: {
+      midConfig: {
+        cardExchangeId: "CEX-FPTR-3456",
+        cardDomainId: "domain-partner",
+        merchantId: "MID-FPX-PARTNER-789012",
+        password: "",
+      },
+      settlement: {
+        settlementMode: "instant",
+        settlementDistribute: "full",
+        settlementDay: "t0",
+        selfAccountNumber: "1234567890123456",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "online",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "2.00",
+            minimum: "12.00",
+            maximum: "170.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "1.00",
+            minimum: "6.00",
+            maximum: "85.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "pos",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.80",
+            minimum: "10.00",
+            maximum: "150.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.90",
+            minimum: "5.00",
+            maximum: "75.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "online",
+            transactionStatus: "chargeback",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "4.00",
+            minimum: "16.00",
+            maximum: "200.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "2.00",
+            minimum: "8.00",
+            maximum: "100.00",
+          },
+        },
+      ],
+    },
   },
 
   // Multi-Product Plans (FPX + E Wallet)
@@ -163,6 +1706,152 @@ const MERCHANT_PLANS: MerchantPlan[] = [
     description: "Bank transfers and e-wallet payments",
     supportedProducts: ["FPX", "E Wallet"],
     category: "standard",
+    fpxConfig: {
+      settlement: {
+        settlementMode: "delayed",
+        settlementDistribute: "split",
+        selfSplitPercent: "70",
+        masterSplitPercent: "30",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t1",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.00",
+            minimum: "10.00",
+            maximum: "100.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.50",
+            minimum: "5.00",
+            maximum: "50.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "cca",
+            transactionModel: "b2b1",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.20",
+            minimum: "12.00",
+            maximum: "120.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.60",
+            minimum: "6.00",
+            maximum: "60.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "2.00",
+            minimum: "15.00",
+            maximum: "150.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "1.00",
+            minimum: "7.50",
+            maximum: "75.00",
+          },
+        },
+      ],
+    },
+    ewalletConfig: {
+      settlement: {
+        settlementMode: "delayed",
+        settlementDistribute: "split",
+        selfSplitPercent: "70",
+        masterSplitPercent: "30",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t1",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "personal",
+            transactionModel: "p2m",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.50",
+            minimum: "8.00",
+            maximum: "120.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.75",
+            minimum: "4.00",
+            maximum: "60.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "business",
+            transactionModel: "p2m",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.70",
+            minimum: "9.00",
+            maximum: "130.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.85",
+            minimum: "4.50",
+            maximum: "65.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "personal",
+            transactionModel: "p2p",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "2.50",
+            minimum: "10.00",
+            maximum: "150.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "1.25",
+            minimum: "5.00",
+            maximum: "75.00",
+          },
+        },
+      ],
+    },
   },
 
   // All Payment Methods
@@ -172,6 +1861,302 @@ const MERCHANT_PLANS: MerchantPlan[] = [
     description: "All payment methods for diverse customer base",
     supportedProducts: ["FPX", "Card", "E Wallet", "RHB DNQR"],
     category: "standard",
+    fpxConfig: {
+      settlement: {
+        settlementMode: "delayed",
+        settlementDistribute: "split",
+        selfSplitPercent: "70",
+        masterSplitPercent: "30",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t1",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.00",
+            minimum: "10.00",
+            maximum: "100.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.50",
+            minimum: "5.00",
+            maximum: "50.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "cca",
+            transactionModel: "b2b1",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.20",
+            minimum: "12.00",
+            maximum: "120.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.60",
+            minimum: "6.00",
+            maximum: "60.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "2.00",
+            minimum: "15.00",
+            maximum: "150.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "1.00",
+            minimum: "7.50",
+            maximum: "75.00",
+          },
+        },
+      ],
+    },
+    cardConfig: {
+      midConfig: {
+        cardExchangeId: "CEX-OMNI-6789",
+        cardDomainId: "domain1",
+        merchantId: "MID-OMNI-STD-890123",
+        password: "",
+      },
+      settlement: {
+        settlementMode: "delayed",
+        settlementDistribute: "full",
+        settlementDay: "t2",
+        selfAccountNumber: "1234567890123456",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "online",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "2.50",
+            minimum: "15.00",
+            maximum: "200.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "1.25",
+            minimum: "7.50",
+            maximum: "100.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "pos",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "2.20",
+            minimum: "12.00",
+            maximum: "180.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "1.10",
+            minimum: "6.00",
+            maximum: "90.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "online",
+            transactionStatus: "chargeback",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "5.00",
+            minimum: "20.00",
+            maximum: "250.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "2.50",
+            minimum: "10.00",
+            maximum: "125.00",
+          },
+        },
+      ],
+    },
+    ewalletConfig: {
+      settlement: {
+        settlementMode: "delayed",
+        settlementDistribute: "split",
+        selfSplitPercent: "70",
+        masterSplitPercent: "30",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t1",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "personal",
+            transactionModel: "p2m",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.50",
+            minimum: "8.00",
+            maximum: "120.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.75",
+            minimum: "4.00",
+            maximum: "60.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "business",
+            transactionModel: "p2m",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.70",
+            minimum: "9.00",
+            maximum: "130.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.85",
+            minimum: "4.50",
+            maximum: "65.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "personal",
+            transactionModel: "p2p",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "2.50",
+            minimum: "10.00",
+            maximum: "150.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "1.25",
+            minimum: "5.00",
+            maximum: "75.00",
+          },
+        },
+      ],
+    },
+    dnqrConfig: {
+      settlement: {
+        settlementMode: "delayed",
+        settlementDistribute: "split",
+        selfSplitPercent: "70",
+        masterSplitPercent: "30",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t1",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "static",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.80",
+            minimum: "5.00",
+            maximum: "80.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.40",
+            minimum: "2.50",
+            maximum: "40.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "business",
+            transactionModel: "dynamic",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.95",
+            minimum: "6.00",
+            maximum: "90.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.45",
+            minimum: "3.00",
+            maximum: "45.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "static",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "1.50",
+            minimum: "7.50",
+            maximum: "100.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "0.75",
+            minimum: "3.75",
+            maximum: "50.00",
+          },
+        },
+      ],
+    },
   },
   {
     id: "omnichannel-partner",
@@ -179,6 +2164,302 @@ const MERCHANT_PLANS: MerchantPlan[] = [
     description: "Full payment suite with partner privileges",
     supportedProducts: ["FPX", "Card", "E Wallet", "RHB DNQR"],
     category: "partner",
+    fpxConfig: {
+      settlement: {
+        settlementMode: "instant",
+        settlementDistribute: "split",
+        selfSplitPercent: "80",
+        masterSplitPercent: "20",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t0",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.80",
+            minimum: "8.00",
+            maximum: "80.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.40",
+            minimum: "4.00",
+            maximum: "40.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "cca",
+            transactionModel: "b2b1",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.95",
+            minimum: "9.50",
+            maximum: "95.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.50",
+            minimum: "5.00",
+            maximum: "50.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "1.50",
+            minimum: "12.00",
+            maximum: "120.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "0.75",
+            minimum: "6.00",
+            maximum: "60.00",
+          },
+        },
+      ],
+    },
+    cardConfig: {
+      midConfig: {
+        cardExchangeId: "CEX-OPTR-7890",
+        cardDomainId: "domain-partner",
+        merchantId: "MID-OMNI-PTR-901234",
+        password: "",
+      },
+      settlement: {
+        settlementMode: "instant",
+        settlementDistribute: "full",
+        settlementDay: "t0",
+        selfAccountNumber: "1234567890123456",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "online",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "2.00",
+            minimum: "12.00",
+            maximum: "170.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "1.00",
+            minimum: "6.00",
+            maximum: "85.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "pos",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.80",
+            minimum: "10.00",
+            maximum: "150.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.90",
+            minimum: "5.00",
+            maximum: "75.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "online",
+            transactionStatus: "chargeback",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "4.00",
+            minimum: "16.00",
+            maximum: "200.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "2.00",
+            minimum: "8.00",
+            maximum: "100.00",
+          },
+        },
+      ],
+    },
+    ewalletConfig: {
+      settlement: {
+        settlementMode: "instant",
+        settlementDistribute: "split",
+        selfSplitPercent: "75",
+        masterSplitPercent: "25",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t0",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "personal",
+            transactionModel: "p2m",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.10",
+            minimum: "6.00",
+            maximum: "90.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.55",
+            minimum: "3.00",
+            maximum: "45.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "business",
+            transactionModel: "p2m",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.25",
+            minimum: "7.00",
+            maximum: "100.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.65",
+            minimum: "3.50",
+            maximum: "50.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "personal",
+            transactionModel: "p2p",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "1.80",
+            minimum: "8.00",
+            maximum: "120.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "0.90",
+            minimum: "4.00",
+            maximum: "60.00",
+          },
+        },
+      ],
+    },
+    dnqrConfig: {
+      settlement: {
+        settlementMode: "instant",
+        settlementDistribute: "split",
+        selfSplitPercent: "75",
+        masterSplitPercent: "25",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t0",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "static",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.65",
+            minimum: "4.00",
+            maximum: "70.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.35",
+            minimum: "2.00",
+            maximum: "35.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "business",
+            transactionModel: "dynamic",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.75",
+            minimum: "5.00",
+            maximum: "75.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.40",
+            minimum: "2.50",
+            maximum: "37.50",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "static",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "1.20",
+            minimum: "6.00",
+            maximum: "85.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "0.60",
+            minimum: "3.00",
+            maximum: "42.50",
+          },
+        },
+      ],
+    },
   },
   {
     id: "omnichannel-enterprise",
@@ -186,6 +2467,302 @@ const MERCHANT_PLANS: MerchantPlan[] = [
     description: "Ultimate payment solution with custom integrations",
     supportedProducts: ["FPX", "Card", "E Wallet", "RHB DNQR"],
     category: "enterprise",
+    fpxConfig: {
+      settlement: {
+        settlementMode: "instant",
+        settlementDistribute: "split",
+        selfSplitPercent: "85",
+        masterSplitPercent: "15",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t0",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.65",
+            minimum: "6.50",
+            maximum: "65.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.35",
+            minimum: "3.50",
+            maximum: "35.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "cca",
+            transactionModel: "b2b1",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.75",
+            minimum: "7.50",
+            maximum: "75.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.40",
+            minimum: "4.00",
+            maximum: "40.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "casa",
+            transactionModel: "b2c",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "1.20",
+            minimum: "10.00",
+            maximum: "100.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "0.60",
+            minimum: "5.00",
+            maximum: "50.00",
+          },
+        },
+      ],
+    },
+    cardConfig: {
+      midConfig: {
+        cardExchangeId: "CEX-ENT-9012",
+        cardDomainId: "domain-enterprise",
+        merchantId: "MID-ENTERPRISE-012345",
+        password: "",
+      },
+      settlement: {
+        settlementMode: "instant",
+        settlementDistribute: "full",
+        settlementDay: "t0",
+        selfAccountNumber: "1234567890123456",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "online",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.70",
+            minimum: "10.00",
+            maximum: "150.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.85",
+            minimum: "5.00",
+            maximum: "75.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "pos",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.50",
+            minimum: "8.00",
+            maximum: "130.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.75",
+            minimum: "4.00",
+            maximum: "65.00",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "online",
+            transactionStatus: "chargeback",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "3.50",
+            minimum: "14.00",
+            maximum: "180.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "1.75",
+            minimum: "7.00",
+            maximum: "90.00",
+          },
+        },
+      ],
+    },
+    ewalletConfig: {
+      settlement: {
+        settlementMode: "instant",
+        settlementDistribute: "split",
+        selfSplitPercent: "80",
+        masterSplitPercent: "20",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t0",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "personal",
+            transactionModel: "p2m",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.95",
+            minimum: "5.50",
+            maximum: "80.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.50",
+            minimum: "2.75",
+            maximum: "40.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "business",
+            transactionModel: "p2m",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "1.05",
+            minimum: "6.00",
+            maximum: "85.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.55",
+            minimum: "3.00",
+            maximum: "42.50",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "personal",
+            transactionModel: "p2p",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "1.50",
+            minimum: "7.00",
+            maximum: "100.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "0.75",
+            minimum: "3.50",
+            maximum: "50.00",
+          },
+        },
+      ],
+    },
+    dnqrConfig: {
+      settlement: {
+        settlementMode: "instant",
+        settlementDistribute: "split",
+        selfSplitPercent: "80",
+        masterSplitPercent: "20",
+        selfAccountNumber: "1234567890123456",
+        settlementDay: "t0",
+        productStatus: "active",
+      },
+      mdrPlans: [
+        {
+          name: "Basic MDR Plan",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "static",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.50",
+            minimum: "3.50",
+            maximum: "60.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.28",
+            minimum: "1.75",
+            maximum: "30.00",
+          },
+        },
+        {
+          name: "Plan 1",
+          condition: {
+            accountType: "business",
+            transactionModel: "dynamic",
+            transactionStatus: "success",
+          },
+          overallMDR: {
+            mdrType: "percentage",
+            mdrValue: "0.60",
+            minimum: "4.00",
+            maximum: "65.00",
+          },
+          profitSharing: {
+            mdrType: "percentage",
+            mdrValue: "0.32",
+            minimum: "2.00",
+            maximum: "32.50",
+          },
+        },
+        {
+          name: "Plan 2",
+          condition: {
+            accountType: "merchant",
+            transactionModel: "static",
+            transactionStatus: "failed",
+          },
+          overallMDR: {
+            mdrType: "fixed",
+            mdrValue: "1.00",
+            minimum: "5.50",
+            maximum: "75.00",
+          },
+          profitSharing: {
+            mdrType: "fixed",
+            mdrValue: "0.50",
+            minimum: "2.75",
+            maximum: "37.50",
+          },
+        },
+      ],
+    },
   },
 ];
 

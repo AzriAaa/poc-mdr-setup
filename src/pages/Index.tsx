@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { ProductSelector } from "@/components/ProductSelector";
-import { MerchantPlanSelector } from "@/components/MerchantPlanSelector";
+import { MerchantPlanSelector, MERCHANT_PLANS } from "@/components/MerchantPlanSelector";
 import { FPXSection } from "@/components/sections/FPXSection";
 import { CardSection } from "@/components/sections/CardSection";
 import { EWalletSection } from "@/components/sections/EWalletSection";
@@ -13,6 +13,9 @@ const Index = () => {
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<string>("");
   const [hasFieldChanges, setHasFieldChanges] = useState(false);
+
+  // Get the selected plan data
+  const selectedPlanData = MERCHANT_PLANS.find((plan) => plan.id === selectedPlan);
 
   // Reset hasFieldChanges when plan changes
   const handlePlanChange = (plan: string) => {
@@ -63,6 +66,7 @@ const Index = () => {
           {selectedProducts.includes("FPX") && (
             <FPXSection
               selectedPlan={selectedPlan}
+              planConfig={selectedPlanData?.fpxConfig}
               onFieldChange={() => setHasFieldChanges(true)}
             />
           )}
@@ -70,6 +74,7 @@ const Index = () => {
           {selectedProducts.includes("Card") && (
             <CardSection
               selectedPlan={selectedPlan}
+              planConfig={selectedPlanData?.cardConfig}
               onFieldChange={() => setHasFieldChanges(true)}
             />
           )}
@@ -77,6 +82,7 @@ const Index = () => {
           {selectedProducts.includes("E Wallet") && (
             <EWalletSection
               selectedPlan={selectedPlan}
+              planConfig={selectedPlanData?.ewalletConfig}
               onFieldChange={() => setHasFieldChanges(true)}
             />
           )}
@@ -84,6 +90,7 @@ const Index = () => {
           {selectedProducts.includes("RHB DNQR") && (
             <RHBDNQRSection
               selectedPlan={selectedPlan}
+              planConfig={selectedPlanData?.dnqrConfig}
               onFieldChange={() => setHasFieldChanges(true)}
             />
           )}

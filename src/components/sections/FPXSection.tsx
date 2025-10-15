@@ -17,11 +17,42 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface FPXSectionProps {
   selectedPlan: string;
   onFieldChange?: () => void;
+  planConfig?: {
+    settlement: {
+      settlementMode: string;
+      settlementDistribute: string;
+      selfSplitPercent: string;
+      masterSplitPercent: string;
+      selfAccountNumber: string;
+      settlementDay: string;
+      productStatus: string;
+    };
+    mdrPlans: Array<{
+      name: string;
+      condition: {
+        accountType: string;
+        transactionModel: string;
+        transactionStatus: string;
+      };
+      overallMDR: {
+        mdrType: string;
+        mdrValue: string;
+        minimum: string;
+        maximum: string;
+      };
+      profitSharing: {
+        mdrType: string;
+        mdrValue: string;
+        minimum: string;
+        maximum: string;
+      };
+    }>;
+  };
 }
 
 interface MDRConfig {
@@ -98,8 +129,19 @@ const MDR_CONFIGS: MDRConfig[] = [
   },
 ];
 
-export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
+export function FPXSection({ selectedPlan, onFieldChange, planConfig }: FPXSectionProps) {
   const [mdrPlans, setMdrPlans] = useState<number[]>([]);
+
+  // Populate MDR plans when selectedPlan changes
+  useEffect(() => {
+    if (planConfig?.mdrPlans) {
+      // Create MDR plan IDs based on the config
+      const planIds = planConfig.mdrPlans.map((_, index) => Date.now() + index);
+      setMdrPlans(planIds);
+    } else {
+      setMdrPlans([]);
+    }
+  }, [selectedPlan]);
 
   const addMdrPlan = () => {
     setMdrPlans([...mdrPlans, Date.now()]);
@@ -118,7 +160,7 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
           <AccordionTrigger className="px-4 sm:px-6 hover:no-underline">
             <h3 className="text-xl sm:text-2xl font-bold">FPX</h3>
           </AccordionTrigger>
-          <AccordionContent className="px-4 sm:px-6 pb-4 sm:pb-6">
+          <AccordionContent className="px-4 sm:px-6 pb-4 sm:pb-6" key={selectedPlan}>
 
       {/* Seller ID Configuration Section */}
       <div className="mb-8">
@@ -188,7 +230,7 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
             <Label htmlFor="settlement-mode-new" className="text-sm text-muted-foreground">
               Settlement Mode
             </Label>
-            <Select defaultValue="delayed" onValueChange={onFieldChange}>
+            <Select defaultValue={planConfig?.settlement.settlementMode || "delayed"} onValueChange={onFieldChange}>
               <SelectTrigger id="settlement-mode-new" className="bg-background">
                 <SelectValue />
               </SelectTrigger>
@@ -202,7 +244,7 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
             <Label htmlFor="settlement-distribute-new" className="text-sm text-muted-foreground">
               Settlement Distribute
             </Label>
-            <Select defaultValue="split" onValueChange={onFieldChange}>
+            <Select defaultValue={planConfig?.settlement.settlementDistribute || "split"} onValueChange={onFieldChange}>
               <SelectTrigger id="settlement-distribute-new" className="bg-background">
                 <SelectValue />
               </SelectTrigger>
@@ -218,7 +260,7 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
             </Label>
             <Input
               id="self-split-new"
-              defaultValue="70"
+              defaultValue={planConfig?.settlement.selfSplitPercent || "70"}
               type="number"
               className="bg-background"
               onChange={onFieldChange}
@@ -230,7 +272,7 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
             </Label>
             <Input
               id="master-split-new"
-              defaultValue="30"
+              defaultValue={planConfig?.settlement.masterSplitPercent || "30"}
               type="number"
               className="bg-background"
               onChange={onFieldChange}
@@ -240,7 +282,7 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
             <Label htmlFor="self-account-new" className="text-sm text-muted-foreground">
               Self Account Number
             </Label>
-            <Select defaultValue="1234567890123456" onValueChange={onFieldChange}>
+            <Select defaultValue={planConfig?.settlement.selfAccountNumber || "1234567890123456"} onValueChange={onFieldChange}>
               <SelectTrigger id="self-account-new" className="bg-background">
                 <SelectValue />
               </SelectTrigger>
@@ -264,7 +306,7 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
             <Label htmlFor="settlement-day-new" className="text-sm text-muted-foreground">
               Settlement Day
             </Label>
-            <Select defaultValue="t1" onValueChange={onFieldChange}>
+            <Select defaultValue={planConfig?.settlement.settlementDay || "t1"} onValueChange={onFieldChange}>
               <SelectTrigger id="settlement-day-new" className="bg-background">
                 <SelectValue />
               </SelectTrigger>
@@ -279,7 +321,7 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
             <Label htmlFor="product-status-new" className="text-sm text-muted-foreground">
               Product Status
             </Label>
-            <Select defaultValue="inactive" onValueChange={onFieldChange}>
+            <Select defaultValue={planConfig?.settlement.productStatus || "inactive"} onValueChange={onFieldChange}>
               <SelectTrigger id="product-status-new" className="bg-background">
                 <SelectValue />
               </SelectTrigger>
@@ -294,10 +336,12 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
 
       {/* MDR Plans Section */}
       <div className="space-y-6">
-        {mdrPlans.map((planId) => (
+        {mdrPlans.map((planId, index) => {
+          const mdrPlanConfig = planConfig?.mdrPlans?.[index];
+          return (
           <div key={planId} className="border-l-4 border-blue-500 pl-4">
             <div className="flex items-center justify-between mb-4">
-              <h5 className="font-semibold text-base">Basic MDR Plan</h5>
+              <h5 className="font-semibold text-base">{mdrPlanConfig?.name || "Basic MDR Plan"}</h5>
               <Button
                 variant="ghost"
                 size="sm"
@@ -314,7 +358,7 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="text-xs text-muted-foreground">Account Type</Label>
-                  <Select defaultValue="casa" onValueChange={onFieldChange}>
+                  <Select defaultValue={mdrPlanConfig?.condition.accountType || "casa"} onValueChange={onFieldChange}>
                     <SelectTrigger className="bg-background">
                       <SelectValue />
                     </SelectTrigger>
@@ -326,7 +370,7 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
                 </div>
                 <div className="space-y-2">
                   <Label className="text-xs text-muted-foreground">Transaction Model</Label>
-                  <Select defaultValue="b2c" onValueChange={onFieldChange}>
+                  <Select defaultValue={mdrPlanConfig?.condition.transactionModel || "b2c"} onValueChange={onFieldChange}>
                     <SelectTrigger className="bg-background">
                       <SelectValue />
                     </SelectTrigger>
@@ -338,7 +382,7 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
                 </div>
                 <div className="space-y-2">
                   <Label className="text-xs text-muted-foreground">Transaction Status</Label>
-                  <Select defaultValue="success" onValueChange={onFieldChange}>
+                  <Select defaultValue={mdrPlanConfig?.condition.transactionStatus || "success"} onValueChange={onFieldChange}>
                     <SelectTrigger className="bg-background">
                       <SelectValue />
                     </SelectTrigger>
@@ -357,7 +401,7 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="text-xs text-muted-foreground">MDR Type</Label>
-                  <Select defaultValue="percentage" onValueChange={onFieldChange}>
+                  <Select defaultValue={mdrPlanConfig?.overallMDR.mdrType || "percentage"} onValueChange={onFieldChange}>
                     <SelectTrigger className="bg-background">
                       <SelectValue />
                     </SelectTrigger>
@@ -370,7 +414,7 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
                 <div className="space-y-2">
                   <Label className="text-xs text-muted-foreground">MDR Value (%)</Label>
                   <Input
-                    defaultValue="1.00"
+                    defaultValue={mdrPlanConfig?.overallMDR.mdrValue || "1.00"}
                     type="number"
                     step="0.01"
                     className="bg-background"
@@ -380,7 +424,7 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
                 <div className="space-y-2">
                   <Label className="text-xs text-muted-foreground">Minimum (MYR)</Label>
                   <Input
-                    defaultValue="10.00"
+                    defaultValue={mdrPlanConfig?.overallMDR.minimum || "10.00"}
                     type="number"
                     step="0.01"
                     className="bg-background"
@@ -390,7 +434,7 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
                 <div className="space-y-2">
                   <Label className="text-xs text-muted-foreground">Maximum (MYR)</Label>
                   <Input
-                    defaultValue="100.00"
+                    defaultValue={mdrPlanConfig?.overallMDR.maximum || "100.00"}
                     type="number"
                     step="0.01"
                     className="bg-background"
@@ -406,7 +450,7 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label className="text-xs text-muted-foreground">MDR Type</Label>
-                  <Select defaultValue="percentage" onValueChange={onFieldChange}>
+                  <Select defaultValue={mdrPlanConfig?.profitSharing.mdrType || "percentage"} onValueChange={onFieldChange}>
                     <SelectTrigger className="bg-background">
                       <SelectValue />
                     </SelectTrigger>
@@ -419,7 +463,7 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
                 <div className="space-y-2">
                   <Label className="text-xs text-muted-foreground">MDR Value (%)</Label>
                   <Input
-                    defaultValue="1.00"
+                    defaultValue={mdrPlanConfig?.profitSharing.mdrValue || "1.00"}
                     type="number"
                     step="0.01"
                     className="bg-background"
@@ -429,7 +473,7 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
                 <div className="space-y-2">
                   <Label className="text-xs text-muted-foreground">Minimum (MYR)</Label>
                   <Input
-                    defaultValue="10.00"
+                    defaultValue={mdrPlanConfig?.profitSharing.minimum || "10.00"}
                     type="number"
                     step="0.01"
                     className="bg-background"
@@ -439,7 +483,7 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
                 <div className="space-y-2">
                   <Label className="text-xs text-muted-foreground">Maximum (MYR)</Label>
                   <Input
-                    defaultValue="100.00"
+                    defaultValue={mdrPlanConfig?.profitSharing.maximum || "100.00"}
                     type="number"
                     step="0.01"
                     className="bg-background"
@@ -449,7 +493,7 @@ export function FPXSection({ selectedPlan, onFieldChange }: FPXSectionProps) {
               </div>
             </div>
           </div>
-        ))}
+        )})}
       </div>
 
       {/* Add MDR Button */}
